@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
                 git branch: 'main',
@@ -12,9 +11,9 @@ pipeline {
 
         stage('Run Ansible') {
             steps {
-                sh '''
-                ansible-playbook -i inventory apache.yml
-                '''
+                sshagent(['ansible-key']) {
+                    sh 'ansible-playbook -i inventory apache.yml'
+                }
             }
         }
     }
